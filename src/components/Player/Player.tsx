@@ -5,11 +5,18 @@ import cn from "classnames";
 import iconPlay from "./../../icons/play.svg"
 import iconPause from "./../../icons/pause.svg"
 import "./Player.scss";
+import {IElement} from "./../../types";
 
 
-export const Player: React.FC<React.HtmlHTMLAttributes<HTMLDivElement>> = ({className}) => {
+interface IPlayer extends React.HtmlHTMLAttributes<HTMLDivElement> {
+  updatePlayerTime: (val: number) => void,
+  elements: IElement[],
+}
+
+
+export const Player: React.FC<IPlayer> = ({updatePlayerTime, className, elements}) => {
   const [isPlay, setIsPlay] = useState<boolean>(false);
-  const [time, setTime] = useState<any>();
+  const [time, setTime] = useState<number>(0);
   const myPlayer = useRef<FilePlayerProps>(null);
 
   const checkCurrentTime = () => {
@@ -41,6 +48,12 @@ export const Player: React.FC<React.HtmlHTMLAttributes<HTMLDivElement>> = ({clas
     return hDisplay + mDisplay + sDisplay; 
   }
 
+  const updateTime = () => {
+    const temp = Math.floor(checkCurrentTime());
+    setTime(temp);
+    updatePlayerTime(temp);
+  }
+
   const duration = useMemo(() => {
     return checkDuration();
   }, [myPlayer.current])
@@ -50,7 +63,7 @@ export const Player: React.FC<React.HtmlHTMLAttributes<HTMLDivElement>> = ({clas
 
       <section className="player__info">
         <button className="player__play" onClick={() => setIsPlay(!isPlay)}>
-          <img src={isPlay ? iconPause : iconPlay} alt="play" width="50" />
+          <img src={isPlay ? iconPause : iconPlay} alt="play" />
         </button>
         <span className="player__timer">{secondsToHms(time)}</span>
       </section>
@@ -62,21 +75,25 @@ export const Player: React.FC<React.HtmlHTMLAttributes<HTMLDivElement>> = ({clas
           <span>{secondsToHms(duration * 4 / 5)}</span>
           <span>{secondsToHms(duration)}</span>
         </section>
+        <section className="player__line">
         <input
           type='range' min={0} max={duration} step='any'
           value={time} className="player__range"
           // onMouseDown={handleSeekMouseDown}
           // onChange={handleSeekChange}
-          onChange={(e) => setTime(e.target.value)}
           // onMouseUp={handleSeekMouseUp}
+          onChange={(e) => setTime(+e.target.value)}
           onMouseUp={() => {myPlayer.current?.seekTo(time)}}
         />
+        {!!duration && (<section className="player__elements">
+          {elements.map((element) => {
+            return <div className="player__element" style={{left: `${element.timeStart*100/duration}%`, width: `${1000/duration}%`}} />
+          })}
+        </section>)}
+        </section>
       </section>
-      <ReactPlayer onProgress={() => setTime(checkCurrentTime())} 
+      <ReactPlayer onProgress={() => updateTime()} 
         ref={myPlayer} playing={isPlay} width="0" height="0" className="react-player" url="https://d3ctxlq1ktw2nl.cloudfront.net/staging/2021-4-13/185868806-44100-2-95edbe2a482b1.m4a" />
-      {/* <button className="player__submit submit-btn">
-        Сохранить и отправить
-      </button> */}
     </section>
   )
 }

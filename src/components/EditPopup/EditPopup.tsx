@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import cn from "classnames";
 import "./EditPopup.scss";
-import { TITLE, BUTTON_IMG, BUTTON_BTN, BUTTON_IMG_AND_BTN, BUTTON_VOTE } from "./EditPopup.constants";
+import { TITLE, SUBMIT, BUTTON_IMG, BUTTON_BTN, BUTTON_IMG_AND_BTN, BUTTON_VOTE } from "./EditPopup.constants";
 import {ControlBar} from "../ControlBar";
 import {Player} from "../Player";
+import {IElement} from "../../types";
 
 // interface IEditPopup extends React.HtmlHTMLAttributes<HTMLDivElement> {
 //   open: boolean
@@ -13,6 +14,20 @@ export const EditPopup: React.FC<React.HtmlHTMLAttributes<HTMLDivElement>> = ({
   className
 }) => {
   const [activeButton, setActiveButton] = useState<number | undefined>(undefined);
+  const [elements, setElements] = useState<IElement[]>([]);
+  const [playerTime, setPlayerTime] = useState<number>(0);
+
+  const updatePlayerTime = (val: number) => {
+    setPlayerTime(val);
+  }
+
+  useEffect(() => {
+    console.log(elements);
+  }, [elements])
+
+  const handleAddElement = (element: IElement) => {
+    setElements(prev => ([...prev, element]))
+  }
 
   return (
     <section className={cn("edit-popup", className)}>
@@ -25,13 +40,13 @@ export const EditPopup: React.FC<React.HtmlHTMLAttributes<HTMLDivElement>> = ({
             })}
           </ul>
         </section>
-        <ControlBar activeButton={activeButton} className="edit-popup__control-bar" />
+        <ControlBar addElement={handleAddElement} playerTime={playerTime} activeButton={activeButton} className="edit-popup__control-bar" />
       </section>
       <section className="edit-popup__bottom">
-        <Player className="edit-popup__player" />
+        <Player elements={elements} updatePlayerTime={updatePlayerTime} className="edit-popup__player" />
       </section>
       <button className="edit-popup__submit submit-btn">
-        Сохранить и отправить
+        {SUBMIT}
       </button>
     </section>
   )

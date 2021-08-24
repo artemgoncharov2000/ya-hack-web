@@ -3,7 +3,26 @@
   // padding-top: 56.25%;
   width: 100%;
   height: 100%;
-  padding: 20px 50px 30px 50px;
+  padding: 15px 50px 30px 50px;
+
+  &__line {
+    position: relative;
+  }
+
+  &__elements {
+    width: 100%;
+    height: 28px;
+    // background-color: green;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  &__element {
+    height: 100%;
+    background-color: #808080;
+    position: absolute;
+  }
 
   &__info {
     display: flex;
@@ -14,15 +33,32 @@
   &__play {
     border: none;
     background-color: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 45px;
+    min-height: 45px;
+    margin-left: -10px;
   }
 
   &__timer {
     margin-left: 20px;
+    font-family: Yandex Sans Text;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 14px;
   }
 
   &__time {
     display: flex;
     justify-content: space-between;
+    margin-bottom: 20px;
+    font-family: Yandex Sans Text;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 14px;
 
     span {
       display: block;
@@ -51,7 +87,7 @@
     width: 100%;
     height: 46px;
     position: relative;
-    margin-top: 20px;
+    // margin-top: 20px;
 
     &::after {
       content: "";
@@ -75,7 +111,7 @@
   }
 }
 
-.react-player {
-  // width: 100%;
-  // height: 100%;
-}
+// .react-player {
+//   // width: 100%;
+//   // height: 100%;
+// }
