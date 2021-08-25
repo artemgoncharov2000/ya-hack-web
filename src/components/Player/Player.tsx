@@ -21,7 +21,6 @@ export const Player: React.FC<IPlayer> = ({updatePlayerTime, className, elements
 
   const checkCurrentTime = () => {
     if (myPlayer.current) {
-      console.log("Проверил время");
       return myPlayer.current.getCurrentTime();
     } else {
       return 0;
@@ -84,7 +83,7 @@ export const Player: React.FC<IPlayer> = ({updatePlayerTime, className, elements
         />
         {!!duration && (<section className="player__elements">
           {elements.map((element) => {
-            return <div className="player__element" style={{left: `${element.timeStart*100/duration}%`, width: `${1000/duration}%`}} />
+            return <div key={element.buttonText} className="player__element" style={{left: `${element.timeStart*100/duration}%`, width: `${1000/duration}%`}} />
           })}
         </section>)}
         </section>

@@ -23,9 +23,6 @@ const ImageControlBar: React.FC<IAddElement> = ({addElement, playerTime, isAvail
       setFile(Object.assign(acceptedFiles[0], {
         preview: URL.createObjectURL(acceptedFiles[0])
       }))
-      console.log(Object.assign(acceptedFiles[0], {
-        preview: URL.createObjectURL(acceptedFiles[0])
-      }));
     }
   });
 
@@ -51,7 +48,6 @@ const ImageControlBar: React.FC<IAddElement> = ({addElement, playerTime, isAvail
         .required("Вы не добавили картинку")
     }),
     onSubmit: values => {
-      alert(JSON.stringify(values, null, 2));
       addElement(values);
       clearValues();
     },
@@ -63,28 +59,28 @@ const ImageControlBar: React.FC<IAddElement> = ({addElement, playerTime, isAvail
 
   useEffect(() => {
     formik.setFieldValue("imageUrl", file);
-    formik.setFieldValue("timeStart", playerTime);
-    formik.setFieldValue("timeEnd", playerTime+10);
   }, [file]);
+
+  const updateValues = async () => {
+    await formik.setFieldValue("timeStart", playerTime);
+    await formik.setFieldValue("timeEnd", playerTime+10);
+  }
 
   return (
     <section className="control-bar__body">
       <section className="dropzone">
        <div {...getRootProps({className: 'dropzone__container'})}>
          <input 
-          // id="imageUrl" 
-          // name="imageUrl" 
-          // onChange={formik.handleChange} 
-          // onBlur={formik.handleBlur} 
-          // value={formik.values.imageUrl} 
           {...getInputProps()} 
          />
           <img src={upload_img} alt="upload_img" />
          {file && <img src={file?.preview} className="dropzone__img" alt="dropdown_img" />}
        </div>
      </section>
-     <p>{file?.size}</p>
-      <button className="control-bar__add-button" type="submit" onClick={() => formik.handleSubmit()}>
+      <button className="control-bar__add-button" type="submit" onClick={async () => {
+        await updateValues();
+        formik.handleSubmit()
+      }}>
         +
       </button>
       <button className="control-bar__delete-button" onClick={() => clearValues()}>
@@ -126,25 +122,22 @@ const ButtonControlBar: React.FC<IAddElement> = ({addElement, playerTime, isAvai
       .required("Введите ссылку"),
     }),
     onSubmit: values => {
-      alert(JSON.stringify(values, null, 2));
       addElement(values);
       clearValues();
     },
   });
 
-  const updateValues = () => {
-    formik.setFieldValue("buttonText", nameVal);
-    formik.setFieldValue("buttonUrl", linkVal);
-    formik.setFieldValue("timeStart", playerTime);
-    formik.setFieldValue("timeEnd", playerTime+10);
+  const updateValues = async () => {
+    await formik.setFieldValue("buttonText", nameVal);
+    await formik.setFieldValue("buttonUrl", linkVal);
+    await formik.setFieldValue("timeStart", playerTime);
+    await formik.setFieldValue("timeEnd", playerTime+10);
   }
 
   const clearValues = () => {
     setNameVal("");
     setLinkVal("");
   }
-
-  console.log("render");
 
   return (
     <section className="control-bar__body">
@@ -168,7 +161,10 @@ const ButtonControlBar: React.FC<IAddElement> = ({addElement, playerTime, isAvai
           type="text" className="buttons-form__input-link input-link" 
           placeholder={LINK} />
       </section>
-      <button className="control-bar__add-button" type="submit" onClick={() => formik.handleSubmit()}>
+      <button className="control-bar__add-button" type="submit" onClick={async () => {
+        await updateValues();
+        formik.handleSubmit()
+      }}>
         +
       </button>
       <button className="control-bar__delete-button" onClick={clearValues}>
@@ -213,7 +209,6 @@ const ImageAndButtonControlBar: React.FC<IAddElement> = ({addElement, playerTime
           .required("Вы не добавили картинку")
     }),
     onSubmit: values => {
-      alert(JSON.stringify(values, null, 2));
       addElement(values);
       clearValues();
     },
@@ -221,18 +216,14 @@ const ImageAndButtonControlBar: React.FC<IAddElement> = ({addElement, playerTime
 
   useEffect(() => {
     formik.setFieldValue("imageUrl", file);
-    formik.setFieldValue("timeStart", playerTime);
-    formik.setFieldValue("timeEnd", playerTime+10);
   }, [file]);
 
-  const updateValues = () => {
-    formik.setFieldValue("buttonText", nameVal);
-    formik.setFieldValue("buttonUrl", linkVal);
-    formik.setFieldValue("timeStart", playerTime);
-    formik.setFieldValue("timeEnd", playerTime+10);
+  const updateValues = async () => {
+    await formik.setFieldValue("buttonText", nameVal);
+    await formik.setFieldValue("buttonUrl", linkVal);
+    await formik.setFieldValue("timeStart", playerTime);
+    await formik.setFieldValue("timeEnd", playerTime+10);
   }
-
-  console.log("render2");
 
   const clearValues = () => {
     setNameVal("");
@@ -247,9 +238,6 @@ const ImageAndButtonControlBar: React.FC<IAddElement> = ({addElement, playerTime
       setFile(Object.assign(acceptedFiles[0], {
         preview: URL.createObjectURL(acceptedFiles[0])
       }))
-      console.log(Object.assign(acceptedFiles[0], {
-        preview: URL.createObjectURL(acceptedFiles[0])
-      }));
     }
   });
 
@@ -282,7 +270,10 @@ const ImageAndButtonControlBar: React.FC<IAddElement> = ({addElement, playerTime
           type="text" className="buttons-form__input-link input-link" 
           placeholder={LINK} />
       </section>
-      <button className="control-bar__add-button" type="submit" onClick={() => formik.handleSubmit()}>
+      <button className="control-bar__add-button" type="submit" onClick={async () => {
+        await updateValues();
+        formik.handleSubmit()
+      }}>
         +
       </button>
       <button className="control-bar__delete-button" onClick={clearValues}>

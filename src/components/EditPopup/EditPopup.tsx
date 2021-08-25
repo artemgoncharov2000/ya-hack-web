@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import cn from "classnames";
 import "./EditPopup.scss";
 import { TITLE, SUBMIT, BUTTON_IMG, BUTTON_BTN, BUTTON_IMG_AND_BTN, BUTTON_VOTE } from "./EditPopup.constants";
@@ -20,10 +20,6 @@ export const EditPopup: React.FC<React.HtmlHTMLAttributes<HTMLDivElement>> = ({
   const updatePlayerTime = (val: number) => {
     setPlayerTime(val);
   }
-
-  useEffect(() => {
-    console.log(elements);
-  }, [elements])
 
   const handleAddElement = (element: IElement) => {
     setElements(prev => ([...prev, element]))
