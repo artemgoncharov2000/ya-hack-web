@@ -7,9 +7,13 @@ import {IEpisode, IAddEpisode, TAddEpisode, TIsAvailable} from "../../types";
 import upload_img from "./../../icons/upload.svg";
 import delete_img from "./../../icons/delete.svg";
 import add_img from "./../../icons/add.svg";
-
+import { Api, apiUrl } from "./../../api";
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import axios from 'axios';
+
+const api = new Api();
+
 
 interface IDropFile extends File {
   preview?: string,
@@ -59,7 +63,26 @@ const ImageControlBar: React.FC<IAddEpisode> = ({addElement, playerTime, isAvail
   }
 
   useEffect(() => {
-    formik.setFieldValue("imageUrl", file);
+    (async () => {
+      try {
+        if (file) {
+          const formData = new FormData();
+          formData.append('file', file);
+          const url = await axios({
+            method: 'POST',
+            url: apiUrl + 'i/edit',
+            headers: {
+                "Authorization": "Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJhdXRob3IzIiwiYXV0aG9yaXRpZXMiOlt7ImF1dGhvcml0eSI6IlJPTEVfQVVUSE9SIn1dLCJpYXQiOjE2Mjk4ODc4NDQsImV4cCI6MTYzMTA0ODQwMH0.cTUhxsxVT6khgHWB89IVN-jugpoBHTBzxomUf2hCbv9fjDQBuCOJDCyaaz6iMsno",
+                'Content-type': 'multipart/form-data'
+            },
+            data: formData
+          });
+          await formik.setFieldValue("imageUrl", url.data);
+        }
+      } catch(err) {
+        console.log(err);
+      }
+    })()
   }, [file]);
 
   const updateValues = async () => {
@@ -216,7 +239,26 @@ const ImageAndButtonControlBar: React.FC<IAddEpisode> = ({addElement, playerTime
   });
 
   useEffect(() => {
-    formik.setFieldValue("imageUrl", file);
+    (async () => {
+      try {
+        if (file) {
+          const formData = new FormData();
+          formData.append('file', file);
+          const url = await axios({
+            method: 'POST',
+            url: apiUrl + 'i/edit',
+            headers: {
+                "Authorization": "Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJhdXRob3IzIiwiYXV0aG9yaXRpZXMiOlt7ImF1dGhvcml0eSI6IlJPTEVfQVVUSE9SIn1dLCJpYXQiOjE2Mjk4ODc4NDQsImV4cCI6MTYzMTA0ODQwMH0.cTUhxsxVT6khgHWB89IVN-jugpoBHTBzxomUf2hCbv9fjDQBuCOJDCyaaz6iMsno",
+                'Content-type': 'multipart/form-data'
+            },
+            data: formData
+          });
+          await formik.setFieldValue("imageUrl", url.data);
+        }
+      } catch(err) {
+        console.log(err);
+      }
+    })()
   }, [file]);
 
   const updateValues = async () => {

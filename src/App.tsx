@@ -21,7 +21,7 @@ function App() {
           Learn React
         </a>
       </header> */}
-      <EditPopup className="popup" />
+      <EditPopup guid="bd2ccd93-1b52-49e1-b144-62ef51f84f5c" className="popup" />
     </div>
   );
 }
