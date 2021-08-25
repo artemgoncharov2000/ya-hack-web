@@ -1,8 +1,10 @@
 export type TAddElement = (el: IElement) => void;
+export type TIsAvailable = (num: number) => boolean;
 
 export interface IAddElement {
   addElement: TAddElement,
   playerTime: number,
+  isAvailable: TIsAvailable,
 }
 
 export interface IElement {

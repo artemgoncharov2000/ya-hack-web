@@ -79,9 +79,6 @@ export const Player: React.FC<IPlayer> = ({updatePlayerTime, className, elements
         <input
           type='range' min={0} max={duration} step='any'
           value={time} className="player__range"
-          // onMouseDown={handleSeekMouseDown}
-          // onChange={handleSeekChange}
-          // onMouseUp={handleSeekMouseUp}
           onChange={(e) => setTime(+e.target.value)}
           onMouseUp={() => {myPlayer.current?.seekTo(time)}}
         />

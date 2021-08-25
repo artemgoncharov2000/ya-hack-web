@@ -29,6 +29,10 @@ export const EditPopup: React.FC<React.HtmlHTMLAttributes<HTMLDivElement>> = ({
     setElements(prev => ([...prev, element]))
   }
 
+  const submit = () => {
+
+  }
+
   return (
     <section className={cn("edit-popup", className)}>
       <section className="edit-popup__top">
@@ -40,7 +44,7 @@ export const EditPopup: React.FC<React.HtmlHTMLAttributes<HTMLDivElement>> = ({
             })}
           </ul>
         </section>
-        <ControlBar addElement={handleAddElement} playerTime={playerTime} activeButton={activeButton} className="edit-popup__control-bar" />
+        <ControlBar elements={elements} addElement={handleAddElement} playerTime={playerTime} activeButton={activeButton} className="edit-popup__control-bar" />
       </section>
       <section className="edit-popup__bottom">
         <Player elements={elements} updatePlayerTime={updatePlayerTime} className="edit-popup__player" />

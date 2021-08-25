@@ -1,9 +1,9 @@
-import React,  {useState, useEffect} from 'react'
+import React,  {useState, useEffect, useCallback} from 'react'
 import {useDropzone} from 'react-dropzone'
 import cn from "classnames";
 import "./ControlBar.scss";
 import { BUTTON_TEXT, LINK, QUESTION, OPTION } from "./ControlBar.constants";
-import {IElement, IAddElement, TAddElement} from "../../types";
+import {IElement, IAddElement, TAddElement, TIsAvailable} from "../../types";
 import upload_img from "./../../icons/upload.svg";
 import delete_img from "./../../icons/delete.svg"
 
@@ -14,7 +14,7 @@ interface IDropFile extends File {
   preview?: string,
 }
 
-const ImageControlBar: React.FC<IAddElement> = ({addElement, playerTime}) => {
+const ImageControlBar: React.FC<IAddElement> = ({addElement, playerTime, isAvailable}) => {
   const [file, setFile] = useState<IDropFile | null>(null);
   const {getRootProps, getInputProps} = useDropzone({
     accept: 'image/jpeg',
@@ -40,11 +40,13 @@ const ImageControlBar: React.FC<IAddElement> = ({addElement, playerTime}) => {
     },
     validationSchema: Yup.object({
       timeStart: Yup.number()
-        .required(""),
+        .required("")
+        .test("Доступно", "Уже есть элемент на таймлайне", val => isAvailable(Number(val))),
       timeEnd: Yup.number()
         .required("")
         .min(playerTime+9, "")
-        .max(playerTime+11, ""),
+        .max(playerTime+11, "")
+        .test("Доступно", "Уже есть элемент на таймлайне", val => isAvailable(Number(val))),
       imageUrl: Yup.mixed()
         .required("Вы не добавили картинку")
     }),
@@ -92,7 +94,7 @@ const ImageControlBar: React.FC<IAddElement> = ({addElement, playerTime}) => {
   )
 } 
 
-const ButtonControlBar: React.FC<IAddElement> = ({addElement, playerTime}) => {
+const ButtonControlBar: React.FC<IAddElement> = ({addElement, playerTime, isAvailable}) => {
   const [nameVal, setNameVal] = useState<string>("");
   const [linkVal, setLinkVal] = useState<string>("");
 
@@ -107,11 +109,13 @@ const ButtonControlBar: React.FC<IAddElement> = ({addElement, playerTime}) => {
     },
     validationSchema: Yup.object({
       timeStart: Yup.number()
-        .required(""),
+        .required("")
+        .test("Доступно", "Уже есть элемент на таймлайне", val => isAvailable(Number(val))),
       timeEnd: Yup.number()
         .required("")
         .min(playerTime+9, "")
-        .max(playerTime+11, ""),
+        .max(playerTime+11, "")
+        .test("Доступно", "Уже есть элемент на таймлайне", val => isAvailable(Number(val))),
       buttonText: Yup.string()
         .required("Введите текст кнопки"),
       buttonUrl: Yup.string()
@@ -174,7 +178,7 @@ const ButtonControlBar: React.FC<IAddElement> = ({addElement, playerTime}) => {
   )
 }
 
-const ImageAndButtonControlBar: React.FC<IAddElement> = ({addElement, playerTime}) => {
+const ImageAndButtonControlBar: React.FC<IAddElement> = ({addElement, playerTime, isAvailable}) => {
   const [file, setFile] = useState<IDropFile | null>(null);
   const [nameVal, setNameVal] = useState<string>("");
   const [linkVal, setLinkVal] = useState<string>("");
@@ -190,11 +194,13 @@ const ImageAndButtonControlBar: React.FC<IAddElement> = ({addElement, playerTime
     },
     validationSchema: Yup.object({
       timeStart: Yup.number()
-        .required(""),
+        .required("")
+        .test("Доступно", "Уже есть элемент на таймлайне", val => isAvailable(Number(val))),
       timeEnd: Yup.number()
         .required("")
         .min(playerTime+9, "")
-        .max(playerTime+11, ""),
+        .max(playerTime+11, "")
+        .test("Доступно", "Уже есть элемент на таймлайне", val => isAvailable(Number(val))),
       buttonText: Yup.string()
         .required("Введите текст кнопки"),
       buttonUrl: Yup.string()
@@ -286,28 +292,39 @@ const ImageAndButtonControlBar: React.FC<IAddElement> = ({addElement, playerTime
   )
 }
 
-const renderSwitch = (num: number | undefined, addElement: TAddElement, playerTime: number) => {
+const renderSwitch = (num: number | undefined, addElement: TAddElement, playerTime: number, isAvailable: TIsAvailable) => {
   switch (num) {
     case 0:
-      return <ImageControlBar addElement={addElement} playerTime={playerTime} />
+      return <ImageControlBar addElement={addElement} playerTime={playerTime} isAvailable={isAvailable} />
     case 1:
-      return <ButtonControlBar addElement={addElement} playerTime={playerTime} />
+      return <ButtonControlBar addElement={addElement} playerTime={playerTime} isAvailable={isAvailable}  />
     case 2:
-      return <ImageAndButtonControlBar addElement={addElement} playerTime={playerTime} />
+      return <ImageAndButtonControlBar addElement={addElement} playerTime={playerTime} isAvailable={isAvailable}  />
     default:
       break;
   }
 }
 
-interface IControlBar extends React.HTMLAttributes<HTMLDivElement>, IAddElement {
+interface IControlBar extends React.HTMLAttributes<HTMLDivElement> {
   playerTime: number,
-  activeButton: number | undefined;
+  addElement: TAddElement,
+  activeButton: number | undefined,
+  elements: IElement[],
 }
 
-export const ControlBar: React.FC<IControlBar> = ({activeButton, playerTime, addElement, className}) => {
+export const ControlBar: React.FC<IControlBar> = ({activeButton, playerTime, addElement, elements, className}) => {
+  const isAvailable = useCallback((num: number): boolean => {
+    for (let i = 0; i < elements.length; i++) {
+      if (num >= elements[i].timeStart && num <= elements[i].timeEnd) {
+        return false;
+      }
+    }
+    return true;
+  }, [elements])
+
   return (
     <section className={cn("control-bar", className)}>
-      {renderSwitch(activeButton, addElement, playerTime)}
+      {renderSwitch(activeButton, addElement, playerTime, isAvailable)}
     </section> 
   )
 }
