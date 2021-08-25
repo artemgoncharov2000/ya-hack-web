@@ -4,3 +4,4 @@ export const BUTTON_IMG = "Картинка";
 export const BUTTON_BTN = "Кнопка";
 export const BUTTON_IMG_AND_BTN = "Картинка и кнопка";
 export const BUTTON_VOTE = "Голосование";
+export const SUBMITTED = "Отправлено";

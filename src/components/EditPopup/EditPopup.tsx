@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import cn from "classnames";
 import "./EditPopup.scss";
-import { TITLE, SUBMIT, BUTTON_IMG, BUTTON_BTN, BUTTON_IMG_AND_BTN, BUTTON_VOTE } from "./EditPopup.constants";
+import { TITLE, SUBMIT, BUTTON_IMG, BUTTON_BTN, BUTTON_IMG_AND_BTN, BUTTON_VOTE, SUBMITTED } from "./EditPopup.constants";
 import {ControlBar} from "../ControlBar";
 import {Player} from "../Player";
 import {IEpisode, IElement} from "../../types";
@@ -20,6 +20,8 @@ export const EditPopup: React.FC<IEditPopup> = ({guid,
   const [elements, setElements] = useState<IEpisode[]>([]);
   const [playerTime, setPlayerTime] = useState<number>(0);
   const [element, setElement] = useState<IElement | null>(null)
+  const [submitted, setSubmitted] = useState(false);
+
 
   const updatePlayerTime = (val: number) => {
     setPlayerTime(val);
@@ -31,7 +33,10 @@ export const EditPopup: React.FC<IEditPopup> = ({guid,
 
   const submit = async () => {
     await api.updateElements(guid, elements);
+    setSubmitted(!submitted);
   }
+
+
 
   useEffect(() => {
     (async() => {
@@ -57,7 +62,7 @@ export const EditPopup: React.FC<IEditPopup> = ({guid,
         <Player element={element} elements={elements} updatePlayerTime={updatePlayerTime} className="edit-popup__player" />
       </section>
       <button onClick={() => submit()} className="edit-popup__submit submit-btn">
-        {SUBMIT}
+        {submitted ? SUBMITTED : SUBMIT}
       </button>
     </section>
   )
