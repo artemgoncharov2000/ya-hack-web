@@ -3,9 +3,10 @@ import {useDropzone} from 'react-dropzone'
 import cn from "classnames";
 import "./ControlBar.scss";
 import { BUTTON_TEXT, LINK, QUESTION, OPTION } from "./ControlBar.constants";
-import {IElement, IAddElement, TAddElement, TIsAvailable} from "../../types";
+import {IEpisode, IAddEpisode, TAddEpisode, TIsAvailable} from "../../types";
 import upload_img from "./../../icons/upload.svg";
-import delete_img from "./../../icons/delete.svg"
+import delete_img from "./../../icons/delete.svg";
+import add_img from "./../../icons/add.svg";
 
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -14,7 +15,7 @@ interface IDropFile extends File {
   preview?: string,
 }
 
-const ImageControlBar: React.FC<IAddElement> = ({addElement, playerTime, isAvailable}) => {
+const ImageControlBar: React.FC<IAddEpisode> = ({addElement, playerTime, isAvailable}) => {
   const [file, setFile] = useState<IDropFile | null>(null);
   const {getRootProps, getInputProps} = useDropzone({
     accept: 'image/jpeg',
@@ -81,7 +82,7 @@ const ImageControlBar: React.FC<IAddElement> = ({addElement, playerTime, isAvail
         await updateValues();
         formik.handleSubmit()
       }}>
-        +
+        <img src={add_img} alt="add_button" />
       </button>
       <button className="control-bar__delete-button" onClick={() => clearValues()}>
         <img src={delete_img} alt="delete_button" />
@@ -90,7 +91,7 @@ const ImageControlBar: React.FC<IAddElement> = ({addElement, playerTime, isAvail
   )
 } 
 
-const ButtonControlBar: React.FC<IAddElement> = ({addElement, playerTime, isAvailable}) => {
+const ButtonControlBar: React.FC<IAddEpisode> = ({addElement, playerTime, isAvailable}) => {
   const [nameVal, setNameVal] = useState<string>("");
   const [linkVal, setLinkVal] = useState<string>("");
 
@@ -165,7 +166,7 @@ const ButtonControlBar: React.FC<IAddElement> = ({addElement, playerTime, isAvai
         await updateValues();
         formik.handleSubmit()
       }}>
-        +
+        <img src={add_img} alt="add_button" />
       </button>
       <button className="control-bar__delete-button" onClick={clearValues}>
         <img src={delete_img} alt="delete_button" />
@@ -174,7 +175,7 @@ const ButtonControlBar: React.FC<IAddElement> = ({addElement, playerTime, isAvai
   )
 }
 
-const ImageAndButtonControlBar: React.FC<IAddElement> = ({addElement, playerTime, isAvailable}) => {
+const ImageAndButtonControlBar: React.FC<IAddEpisode> = ({addElement, playerTime, isAvailable}) => {
   const [file, setFile] = useState<IDropFile | null>(null);
   const [nameVal, setNameVal] = useState<string>("");
   const [linkVal, setLinkVal] = useState<string>("");
@@ -274,7 +275,7 @@ const ImageAndButtonControlBar: React.FC<IAddElement> = ({addElement, playerTime
         await updateValues();
         formik.handleSubmit()
       }}>
-        +
+        <img src={add_img} alt="add_button" />
       </button>
       <button className="control-bar__delete-button" onClick={clearValues}>
         <img src={delete_img} alt="delete_button" />
@@ -283,7 +284,7 @@ const ImageAndButtonControlBar: React.FC<IAddElement> = ({addElement, playerTime
   )
 }
 
-const renderSwitch = (num: number | undefined, addElement: TAddElement, playerTime: number, isAvailable: TIsAvailable) => {
+const renderSwitch = (num: number | undefined, addElement: TAddEpisode, playerTime: number, isAvailable: TIsAvailable) => {
   switch (num) {
     case 0:
       return <ImageControlBar addElement={addElement} playerTime={playerTime} isAvailable={isAvailable} />
@@ -298,9 +299,9 @@ const renderSwitch = (num: number | undefined, addElement: TAddElement, playerTi
 
 interface IControlBar extends React.HTMLAttributes<HTMLDivElement> {
   playerTime: number,
-  addElement: TAddElement,
+  addElement: TAddEpisode,
   activeButton: number | undefined,
-  elements: IElement[],
+  elements: IEpisode[],
 }
 
 export const ControlBar: React.FC<IControlBar> = ({activeButton, playerTime, addElement, elements, className}) => {

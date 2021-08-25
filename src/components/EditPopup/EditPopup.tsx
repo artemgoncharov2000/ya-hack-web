@@ -4,24 +4,20 @@ import "./EditPopup.scss";
 import { TITLE, SUBMIT, BUTTON_IMG, BUTTON_BTN, BUTTON_IMG_AND_BTN, BUTTON_VOTE } from "./EditPopup.constants";
 import {ControlBar} from "../ControlBar";
 import {Player} from "../Player";
-import {IElement} from "../../types";
-
-// interface IEditPopup extends React.HtmlHTMLAttributes<HTMLDivElement> {
-//   open: boolean
-// }
+import {IEpisode} from "../../types";
 
 export const EditPopup: React.FC<React.HtmlHTMLAttributes<HTMLDivElement>> = ({
   className
 }) => {
   const [activeButton, setActiveButton] = useState<number | undefined>(undefined);
-  const [elements, setElements] = useState<IElement[]>([]);
+  const [elements, setElements] = useState<IEpisode[]>([]);
   const [playerTime, setPlayerTime] = useState<number>(0);
 
   const updatePlayerTime = (val: number) => {
     setPlayerTime(val);
   }
 
-  const handleAddElement = (element: IElement) => {
+  const handleAddElement = (element: IEpisode) => {
     setElements(prev => ([...prev, element]))
   }
 

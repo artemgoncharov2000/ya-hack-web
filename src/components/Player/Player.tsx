@@ -5,12 +5,12 @@ import cn from "classnames";
 import iconPlay from "./../../icons/play.svg"
 import iconPause from "./../../icons/pause.svg"
 import "./Player.scss";
-import {IElement} from "./../../types";
+import {IEpisode} from "./../../types";
 
 
 interface IPlayer extends React.HtmlHTMLAttributes<HTMLDivElement> {
   updatePlayerTime: (val: number) => void,
-  elements: IElement[],
+  elements: IEpisode[],
 }
 
 
